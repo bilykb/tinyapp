@@ -29,6 +29,11 @@ app.get('/urls/new', (req, res) => {
   res.render('urls_new')
 });
 
+app.post('/urls', (req, res) => {
+  console.log(req.body);
+  res.send('Ok');
+});
+
 app.get('/urls/:shortURL', (req, res) => {
   const shortURLkey = req.params.shortURL
   const templateVars = { shortURL: req.params.shortURL, longURL: urlDatabase[shortURLkey]  }
