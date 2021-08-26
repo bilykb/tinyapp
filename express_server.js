@@ -11,18 +11,7 @@ const urlDatabase = {
 };
 
 const generateRandomString = () => {
-//   const newRandomSixValues = []
-//   const lettersAndNumbers = {
-//     0: "1234567890",
-//     1: "abcdefghijklmnopqrstuvwxyz"
-//   }
-//   for (let i = 0; i < 6; i++) {
-//     let letterOrNumberkey = Math.round(Math.random()).toString();
-//     let randomCharacterInKey = Math.round(Math.random() * (lettersAndNumbers[letterOrNumberkey].length - 1))
-//     // Math.random() used to generate a random key value, as well as a random index number, which is pushed to newRandomSixValues to generate a random 6 character string
-//     newRandomSixValues.push(lettersAndNumbers[letterOrNumberkey][randomCharacterInKey])
-//   }
-// return newRandomSixValues.join("");
+// returns six random numbers in base 36, converted to a string representation of their number
 return Math.random().toString(36).substr(2, 6);
 }
 
