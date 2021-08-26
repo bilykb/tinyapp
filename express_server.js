@@ -35,8 +35,9 @@ app.get('/urls/new', (req, res) => {
 });
 
 app.post('/urls', (req, res) => {
-  console.log(req.body);
-  res.send('Ok');
+  newSixDigits = generateRandomString()
+  urlDatabase[newSixDigits] = req.body.longURL
+  res.redirect('/urls');
 });
 
 app.get('/urls/:shortURL', (req, res) => {
