@@ -41,6 +41,12 @@ app.post('/urls', (req, res) => {
   res.redirect(`/urls/${newSixDigits}`);
 });
 
+app.post('/urls/:shortURL', (req, res) => {
+  const shortURLkey = req.params.shortURL
+  urlDatabase[shortURLkey] = req.body.longURL
+  res.redirect(`/urls/${shortURLkey}`);
+});
+
 app.get('/urls/:shortURL', (req, res) => {
   const shortURLkey = req.params.shortURL
   const templateVars = { shortURL: req.params.shortURL, longURL: urlDatabase[shortURLkey]  }
