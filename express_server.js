@@ -49,8 +49,11 @@ app.get('/urls/:shortURL', (req, res) => {
 
 app.get('/u/:shortURL', (req, res) => {
   const longURL = urlDatabase[req.params.shortURL]
-  res.redirect(longURL)
-})
+ if (!urlDatabase[req.params.shortURL]) {
+   return res.send("Error, please check your shortened URL");
+ }
+res.redirect(longURL);
+});
 
 app.get('/hello', (req, res) => {
   res.send('<html><body>Hello <b>World</b></body></html>\n');
