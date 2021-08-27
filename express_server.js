@@ -44,13 +44,16 @@ app.post('/urls', (req, res) => {
 app.get('/urls/:shortURL', (req, res) => {
   const shortURLkey = req.params.shortURL
   const templateVars = { shortURL: req.params.shortURL, longURL: urlDatabase[shortURLkey]  }
+  if(!urlDatabase[req.params.shortURL]) {
+    return res.send("Error, please check your shorted URL");
+  }
   res.render('urls_show', templateVars)
 });
 
 app.get('/u/:shortURL', (req, res) => {
   const longURL = urlDatabase[req.params.shortURL]
- if (!urlDatabase[req.params.shortURL]) {
-   return res.send("Error, please check your shortened URL");
+  if (!urlDatabase[req.params.shortURL]) {
+    return res.send("Error, please check your shortened URL");
  }
 res.redirect(longURL);
 });
