@@ -44,10 +44,16 @@ app.post('/urls', (req, res) => {
 app.get('/urls/:shortURL', (req, res) => {
   const shortURLkey = req.params.shortURL
   const templateVars = { shortURL: req.params.shortURL, longURL: urlDatabase[shortURLkey]  }
+
   if(!urlDatabase[req.params.shortURL]) {
     return res.send("Error, please check your shorted URL");
   }
-  res.render('urls_show', templateVars)
+  res.render('urls_show', templateVars);
+});
+
+app.post('/urls/:shortURL/delete', (req, res) => {
+  delete urlDatabase[req.params.shortURL];
+  res.redirect("/urls")
 });
 
 app.get('/u/:shortURL', (req, res) => {
@@ -57,6 +63,7 @@ app.get('/u/:shortURL', (req, res) => {
  }
 res.redirect(longURL);
 });
+
 
 app.get('/hello', (req, res) => {
   res.send('<html><body>Hello <b>World</b></body></html>\n');
