@@ -64,7 +64,7 @@ app.post('/urls/:shortURL/delete', (req, res) => {
 
 app.get('/u/:shortURL', (req, res) => {
   const longURL = urlDatabase[req.params.shortURL]
-  if (!urlDatabase[req.params.shortURL]) {
+  if (!longURL) {
     return res.send("Error, please check your shortened URL");
  }
 res.redirect(longURL);
