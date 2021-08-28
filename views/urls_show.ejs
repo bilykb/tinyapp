@@ -9,23 +9,25 @@
 
 <body>
   <header><%- include('partials/_header') %></header>
-  <div class="card text-center">
-      <div class="card-header"></div>
-      <div class="card-body">
-        <h5 class="card-title">TinyURL for: <%= longURL %></h5>
-        <p class="card-text">Short URL: <a href="/u/<%= shortURL %>"><%= shortURL %></a></p>
-      </div>
-    <div class="card-footer text-muted">
-      <h3>Edit</h3>
-      <form class="form-inline justify-content-center" method="POST" action="/urls/<%= shortURL %>">
-        <div class="form-group mb-2">
-          <label for="longURL">New URL:</label>
-          <input class="form-control" type="text" name="longURL" placeholder="http://" style="width: 200px; margin:1em">
-          <button type="submit" class="btn btn-primary">Submit</button>
+  <main style="margin: 1em;">
+    <div class="card text-center">
+        <div class="card-header"></div>
+        <div class="card-body">
+          <h5 class="card-title">TinyURL for: <%= longURL %></h5>
+          <p class="card-text">Short URL: <a href="/u/<%= shortURL %>"><%= shortURL %></a></p>
         </div>
-      </form>
+      <div class="card-footer text-muted">
+        <h3>Edit</h3>
+        <form class="form-inline justify-content-center" method="POST" action="/urls/<%= shortURL %>">
+          <div class="form-group mb-2">
+            <label for="longURL">New URL:</label>
+            <input class="form-control" type="text" name="longURL" placeholder="http://" style="width: 200px; margin:1em">
+            <button type="submit" class="btn btn-primary">Submit</button>
+          </div>
+        </form>
+      </div>
     </div>
-  </div>
+  </main>
   <!-- Bootstrap JS -->
     <script src="https://code.jquery.com/jquery-3.6.0.slim.min.js" integrity="sha256-u7e5khyithlIdTpu22PHhENmPcRdFiHRjhAuHcs05RI=" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js" integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p" crossorigin="anonymous"></script>
