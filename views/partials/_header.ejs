@@ -10,10 +10,10 @@
         <a class="nav-item nav-link" href="/urls/new">Create New URL</a>
 
           <form class="form-inline" method="POST" action="/login">
-            <input type="text" class="form-control" placeholder="Username" aria-label="username" aria-describedby="username">
-            <button class="btn btn-outline-light" type="submit" id="username">Submit</button>
+            <input type="text" name="username" class="form-control" placeholder="Username" aria-label="username" aria-describedby="username">
+            <button class="btn btn-outline-light" type="submit">Submit</button>
           </form>
-
+          <h5><%= username %></h5>
       </div>
     </div>
   </nav>

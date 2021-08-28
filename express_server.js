@@ -2,6 +2,7 @@ const express = require('express');
 const app = express();
 const PORT = 8080; // default port 8080
 const bodyParser = require('body-parser');
+const cookieParser = require('cookie-parser');
 
 app.set('view engine', 'ejs');
 
@@ -16,6 +17,7 @@ return Math.random().toString(36).substr(2, 6);
 }
 
 app.use(bodyParser.urlencoded({extended:true}))
+app.use(cookieParser());
 
 app.get("/", (req, res) => {
   res.send("Hello!");
@@ -25,13 +27,20 @@ app.get('/urls.json', (req, res) => {
   res.json(urlDatabase);
 });
 
+app.post('/login', (req, res) => {
+  
+  res.cookie('username', req.body.username)
+  res.redirect("/urls");
+});
+
 app.get('/urls', (req, res) => {
-  const templateVars = { urls: urlDatabase };
+  const templateVars = { urls: urlDatabase, username: req.cookies.username };
   res.render('urls_index', templateVars);
 });
 
 app.get('/urls/new', (req, res) => {
-  res.render('urls_new')
+  const templateVars = { username: req.cookies.username };
+  res.render('urls_new', templateVars);
 });
 
 app.post('/urls', (req, res) => {
@@ -47,9 +56,10 @@ app.post('/urls/:shortURL', (req, res) => {
   res.redirect(`/urls/${shortURLkey}`);
 });
 
+
 app.get('/urls/:shortURL', (req, res) => {
   const shortURLkey = req.params.shortURL
-  const templateVars = { shortURL: req.params.shortURL, longURL: urlDatabase[shortURLkey]  }
+  const templateVars = { shortURL: req.params.shortURL, longURL: urlDatabase[shortURLkey], username: req.cookies.username }
 
   if(!urlDatabase[req.params.shortURL]) {
     return res.send("Error, please check your shorted URL");
@@ -69,7 +79,6 @@ app.get('/u/:shortURL', (req, res) => {
  }
 res.redirect(longURL);
 });
-
 
 app.get('/hello', (req, res) => {
   res.send('<html><body>Hello <b>World</b></body></html>\n');
