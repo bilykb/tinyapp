@@ -13,7 +13,12 @@
             <input type="text" name="username" class="form-control" placeholder="Username" aria-label="username" aria-describedby="username">
             <button class="btn btn-outline-light" type="submit">Submit</button>
           </form>
-          <h5><%= username %></h5>
+          <div class="dropdown">
+            <button class="btn btn-outline-light dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><%= username %></button>
+            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+              <a class="dropdown-item" href="#">Logout</a>
+            </div>
+          </div>
       </div>
     </div>
   </nav>
