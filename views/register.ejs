@@ -10,14 +10,15 @@
   <body>
     <header><%- include('partials/_header') %></header>
     <main style="margin: 1em;">
+      <h3>New Registration</h3>
         <form method="POST" action="/register"
             <div class="form-floating">
-              <input type="email" name="email" class="form-control" id="floatingInput autoSizingInput" placeholder="name@example.com" aria-label="Email">
-              <label for="floatingInput">Email address</label>
+              <input type="email" name="email" class="form-control" id="floatingInput autoSizingInput" placeholder="name@example.com" style="width: 300px; margin: 1em" aria-label="Email">
+              <label for="floatingInput" style="margin-left: 1em">Email address</label>
             </div>
             <div class="form-floating">
-              <input type="password" name="password" class="form-control" id="floatingPassword autoSizingPassword" placeholder="Password" aria-label="Password">
-              <label for="floatingPassword">Password</label>
+              <input type="password" name="password" class="form-control" id="floatingPassword autoSizingPassword" placeholder="Password" style="width: 300px; margin: 1em" aria-label="Password">
+              <label for="floatingPassword" style="margin-left: 1em">Password</label>
             </div>
                 <div class="form-check">
                   <input class="form-check-input" name="saveCookies" type="checkbox" id="autoSizingCheck" aria-label="Remember me checkbox">
@@ -26,7 +27,7 @@
                   </label>
                 </div>
             <div class="col-auto">
-              <button type="submit" class="btn btn-primary">Sign in</button>
+              <button type="submit" class="btn btn-primary" style="width: 300px; margin: 1em">Sign in</button>
             </div>
           </div>
         </form>
