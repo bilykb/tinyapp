@@ -24,12 +24,12 @@ const users = {
     password: "dishwasher-funk",
     rememberMe: undefined
   }
-}
+};
 
 const generateRandomString = () => {
 // returns six random numbers in base 36, converted to a string representation of their number
 return Math.random().toString(36).substr(2, 6);
-}
+};
 
 app.use(bodyParser.urlencoded({extended:true}))
 app.use(cookieParser());
@@ -43,7 +43,7 @@ app.get('/urls.json', (req, res) => {
 });
 
 app.post('/login', (req, res) => {
-  res.cookie('user_id', req.cookies.user_id)
+  res.cookie('userEmail', req.cookies.user_id)
   res.redirect("/urls");
 });
 
@@ -53,13 +53,13 @@ app.post('/logout', (req, res) => {
 })
 
 app.get('/register', (req, res) => {
-  const user = req.cookies.user_id
-  const templateVars = { user_id: users[user] };
+  const userID = req.cookies.user_id
+  const templateVars = { user: users[userID] };
   res.render('register', templateVars)
 });
 
 app.post('/register', (req, res) => {
-  newRandomID = generateRandomString()
+  const newRandomID = generateRandomString()
   users[newRandomID] = {
     id: newRandomID,
     email: req.body.email,
@@ -73,14 +73,14 @@ app.post('/register', (req, res) => {
 });
 
 app.get('/urls', (req, res) => {
-  const user = req.cookies.user_id
-  const templateVars = { urls: urlDatabase, user_id: users[user] };
+  const userID = req.cookies.user_id
+  const templateVars = { urls: urlDatabase, user: users[userID] };
   res.render('urls_index', templateVars);
 });
 
 app.get('/urls/new', (req, res) => {
-  const user = req.cookies.user_id
-  const templateVars = { user_id: users[user] };
+  const userID = req.cookies.user_id
+  const templateVars = { user: users[userID] };
   res.render('urls_new', templateVars);
 });
 
@@ -98,9 +98,9 @@ app.post('/urls/:shortURL', (req, res) => {
 
 
 app.get('/urls/:shortURL', (req, res) => {
-  const user = req.cookies.user_id
+  const userID = req.cookies.user_id
   const shortURLkey = req.params.shortURL
-  const templateVars = { shortURL: req.params.shortURL, longURL: urlDatabase[shortURLkey], user_id: users[user] }
+  const templateVars = { shortURL: req.params.shortURL, longURL: urlDatabase[shortURLkey], user: users[userID] }
   if(!urlDatabase[req.params.shortURL]) {
     return res.send("Error, please check your shorted URL");
   }

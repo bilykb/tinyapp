@@ -5,23 +5,23 @@
       <span class="navbar-toggler-icon"></span>
     </button>
     <div class="collapse navbar-collapse justify-content-between" id="navbarNavAltMarkup">
-      <div class="navbar-nav">
-        <a class="nav-item nav-link" href="/urls">My URLs</a>
-        <a class="nav-item nav-link" href="/urls/new">Create New URL</a>
-      </div>
-      <% if(!user_id) { %>
+    <div class="navbar-nav">
+      <a class="nav-item nav-link" href="/urls">My URLs</a>
+      <a class="nav-item nav-link" href="/urls/new">Create New URL</a>
+    </div>
+    <% if(!user) { %>
         <form class="form-inline" method="POST" action="/login">
-          <input type="text" name="username" class="form-control" placeholder="Username" aria-label="username" aria-describedby="username">
+          <input type="text" name="userEmail" class="form-control" placeholder="email" aria-label="email" aria-describedby="email">
           <button class="btn btn-outline-light" type="submit">Submit</button>
         </form>
       <% } else { %>
         <div class="dropdown">
-          <button class="btn btn-outline-light dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><%= user_id["email"] %></button>
-          <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-            <form method="POST" action="/logout">
-              <button class="dropdown-item" aria-labelledby="dropdownMenuButton" type="submit">Logout</a>
-            </form>
-          </div>
+          <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false"><%= user["email"] %></button>
+          <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+            <li><form method="POST" action="/logout">
+              <button class="dropdown-item" aria-labelledby="dropdownMenuButton" type="submit">Logout</button>
+            </form></li>
+          </ul>
         </div>
       <% } %>
     </div>
