@@ -43,28 +43,28 @@ app.get('/urls.json', (req, res) => {
 });
 
 app.post('/login', (req, res) => {
-  res.cookie('username', req.body.username)
+  res.cookie('user_id', req.cookies.user_id)
   res.redirect("/urls");
 });
 
 app.post('/logout', (req, res) => {
-  res.clearCookie('username', req.body.username)
+  res.clearCookie('user_id', req.cookies.user_id)
   res.redirect("/urls");
 })
 
 app.get('/register', (req, res) => {
-  const templateVars = { username: req.cookies.username };
+  const user = req.cookies.user_id
+  const templateVars = { user_id: users[user] };
   res.render('register', templateVars)
 });
 
 app.post('/register', (req, res) => {
   newRandomID = generateRandomString()
-  users.newRandomID = {
+  users[newRandomID] = {
     id: newRandomID,
     email: req.body.email,
     password: req.body.password,
     rememberMe: undefined
-
   }
   if(req.body.saveCookies) {
     res.cookie("user_id", newRandomID)
@@ -73,12 +73,14 @@ app.post('/register', (req, res) => {
 });
 
 app.get('/urls', (req, res) => {
-  const templateVars = { urls: urlDatabase, username: req.cookies.username };
+  const user = req.cookies.user_id
+  const templateVars = { urls: urlDatabase, user_id: users[user] };
   res.render('urls_index', templateVars);
 });
 
 app.get('/urls/new', (req, res) => {
-  const templateVars = { username: req.cookies.username };
+  const user = req.cookies.user_id
+  const templateVars = { user_id: users[user] };
   res.render('urls_new', templateVars);
 });
 
@@ -96,9 +98,9 @@ app.post('/urls/:shortURL', (req, res) => {
 
 
 app.get('/urls/:shortURL', (req, res) => {
+  const user = req.cookies.user_id
   const shortURLkey = req.params.shortURL
-  const templateVars = { shortURL: req.params.shortURL, longURL: urlDatabase[shortURLkey], username: req.cookies.username }
-
+  const templateVars = { shortURL: req.params.shortURL, longURL: urlDatabase[shortURLkey], user_id: users[user] }
   if(!urlDatabase[req.params.shortURL]) {
     return res.send("Error, please check your shorted URL");
   }

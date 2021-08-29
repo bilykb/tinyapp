@@ -9,14 +9,14 @@
         <a class="nav-item nav-link" href="/urls">My URLs</a>
         <a class="nav-item nav-link" href="/urls/new">Create New URL</a>
       </div>
-      <% if(!username) { %>
+      <% if(!user_id) { %>
         <form class="form-inline" method="POST" action="/login">
           <input type="text" name="username" class="form-control" placeholder="Username" aria-label="username" aria-describedby="username">
           <button class="btn btn-outline-light" type="submit">Submit</button>
         </form>
       <% } else { %>
         <div class="dropdown">
-          <button class="btn btn-outline-light dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><%= username %></button>
+          <button class="btn btn-outline-light dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><%= user_id["email"] %></button>
           <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
             <form method="POST" action="/logout">
               <button class="dropdown-item" aria-labelledby="dropdownMenuButton" type="submit">Logout</a>
