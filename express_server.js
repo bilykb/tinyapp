@@ -11,6 +11,21 @@ const urlDatabase = {
   "9sm5xK": "http://www.google.com"
 };
 
+const users = { 
+  "userRandomID": {
+    id: "userRandomID", 
+    email: "user@example.com", 
+    password: "purple-monkey-dinosaur",
+    rememberMe: undefined
+  },
+ "user2RandomID": {
+    id: "user2RandomID", 
+    email: "user2@example.com", 
+    password: "dishwasher-funk",
+    rememberMe: undefined
+  }
+}
+
 const generateRandomString = () => {
 // returns six random numbers in base 36, converted to a string representation of their number
 return Math.random().toString(36).substr(2, 6);
@@ -42,6 +57,21 @@ app.get('/register', (req, res) => {
   res.render('register', templateVars)
 });
 
+app.post('/register', (req, res) => {
+  newRandomID = generateRandomString()
+  users.newRandomID = {
+    id: newRandomID,
+    email: req.body.email,
+    password: req.body.password,
+    rememberMe: undefined
+
+  }
+  if(req.body.saveCookies) {
+    res.cookie("user_id", newRandomID)
+  }
+  res.redirect('/urls');
+});
+
 app.get('/urls', (req, res) => {
   const templateVars = { urls: urlDatabase, username: req.cookies.username };
   res.render('urls_index', templateVars);
@@ -53,10 +83,9 @@ app.get('/urls/new', (req, res) => {
 });
 
 app.post('/urls', (req, res) => {
-  newSixDigits = generateRandomString()
-  urlDatabase[newSixDigits] = req.body.longURL
-  console.log(newSixDigits, urlDatabase[newSixDigits])
-  res.redirect(`/urls/${newSixDigits}`);
+  newRandomID = generateRandomString()
+  urlDatabase[newRandomID] = req.body.longURL
+  res.redirect(`/urls/${newRandomID}`);
 });
 
 app.post('/urls/:shortURL', (req, res) => {
