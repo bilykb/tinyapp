@@ -43,6 +43,12 @@ app.get('/urls.json', (req, res) => {
   res.json(urlDatabase);
 });
 
+app.get('/login', (req, res) => {
+  const userID = req.cookies.user_id
+  const templateVars = { user: users[userID] }
+  res.render('login', templateVars)
+});
+
 app.post('/login', (req, res) => {
   res.cookie('userEmail', req.cookies.user_id)
   res.redirect("/urls");
@@ -51,7 +57,7 @@ app.post('/login', (req, res) => {
 app.post('/logout', (req, res) => {
   res.clearCookie('user_id', req.cookies.user_id)
   res.redirect("/urls");
-})
+});
 
 app.get('/register', (req, res) => {
   const userID = req.cookies.user_id
@@ -64,16 +70,17 @@ app.post('/register', (req, res) => {
   const newEmail = req.body.email;
   const newPassword = req.body.password
 
+  console.log(newEmail, users)
+  if(!newEmail.length || !newPassword.length) {
+    return res.status(400).send("Error code: 400\nPOST failed")
+  } else if (emailChecker(newEmail, users)){
+    return res.status(400).send("Error code: 400\nThis email already exists")
+  }
   users[newRandomID] = {
     id: newRandomID,
     email: newEmail,
     password: newPassword,
     rememberMe: undefined
-  }
-  if(!newEmail.length || !newPassword.length) {
-    return res.status(400).send("Error code: 400\nPOST failed")
-  } else if (emailChecker(newEmail, users)){
-    return res.status(400).send("Error code: 400\nThis email already exists")
   }
   if(req.body.saveCookies) {
     res.cookie("user_id", newRandomID)
