@@ -60,11 +60,17 @@ app.get('/register', (req, res) => {
 
 app.post('/register', (req, res) => {
   const newRandomID = generateRandomString()
+  const newEmail = req.body.email;
+  const newPassword = req.body.password
+
   users[newRandomID] = {
     id: newRandomID,
-    email: req.body.email,
-    password: req.body.password,
+    email: newEmail,
+    password: newPassword,
     rememberMe: undefined
+  }
+  if(!newEmail.length || !newPassword.length) {
+    return res.status(400).send("Error code: 400, POST failed")
   }
   if(req.body.saveCookies) {
     res.cookie("user_id", newRandomID)

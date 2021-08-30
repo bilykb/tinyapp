@@ -27,7 +27,15 @@
                   </label>
                 </div>
             <div class="col-auto">
-              <button type="submit" class="btn btn-primary" style="width: 300px; margin: 1em">Sign in</button>
+              <button type="submit" class="btn btn-primary" id="SignInNewRegister" style="width: 300px; margin: 1em">Sign in</button>
+              <script>
+                function registrationSubmitAlert() {
+                  if(document.getElementById("floatingInputs").value.length === 0 || documents.getElementById("floatingPassword").value.length === 0) {
+                    alert('Please be sure to fill out "Email Address" and "Password" fields');
+                  }
+                };
+                document.getElementById("SignInNewRegister").onclick = registrationSubmitAlert
+              </script>
             </div>
           </div>
         </form>
