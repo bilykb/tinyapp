@@ -3,6 +3,7 @@ const app = express();
 const PORT = 8080; // default port 8080
 const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
+const emailChecker = require('./emailChecker')
 
 app.set('view engine', 'ejs');
 
@@ -70,7 +71,9 @@ app.post('/register', (req, res) => {
     rememberMe: undefined
   }
   if(!newEmail.length || !newPassword.length) {
-    return res.status(400).send("Error code: 400, POST failed")
+    return res.status(400).send("Error code: 400\nPOST failed")
+  } else if (emailChecker(newEmail, users)){
+    return res.status(400).send("Error code: 400\nThis email already exists")
   }
   if(req.body.saveCookies) {
     res.cookie("user_id", newRandomID)
