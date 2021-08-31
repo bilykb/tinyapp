@@ -36,7 +36,7 @@ const idChecker = (userDatabase, shortUrlDatabase) => {
 };
 
 /**
- * Function which authenticates a user using two helper functions: emailChecker or passwordChecker
+ * Function which authenticates various user data using three helper functions: emailChecker, passwordChecker, and idChecker
  * @param {object} userDatabase 
  * @param {req.body.${key}} comparisonValue 
  * @param {cbFuntion} authCb 
