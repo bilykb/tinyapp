@@ -6,7 +6,7 @@
  * @returns boolean;
  */
 const emailChecker = (userData, reqEmail) => {
-  return userData["email"] === reqEmail;
+  return userData["email"] === reqEmail
 };
 
 /**
@@ -16,22 +16,39 @@ const emailChecker = (userData, reqEmail) => {
  * @returns {object} userData
  */
 const passwordChecker = (userData, reqPassword) => {
-  return userData["password"] === reqPassword
+  if(userData["password"] === reqPassword) {
+    return userData.id
+  }
+};
+
+/**
+ * Function checks to see if a ID exists within the database; Helper function for authenticator
+ * @param {object} userDatabase object where user data is stored
+ * @param {object} shortUrlDatabase object where short URLs and associated user IDs are stored
+ * @returns {boolean} boolean for whethere there is a match
+ */
+const idChecker = (userDatabase, shortUrlDatabase) => {
+  for(let shortUrl in shortUrlDatabase) {
+    if(userDatabase["userID"] === shortUrl["userID"]) {
+      return shortUrl
+    }
+  }
 };
 
 /**
  * Function which authenticates a user using two helper functions: emailChecker or passwordChecker
  * @param {object} userDatabase 
- * @param {req.body.${key}} userValue 
+ * @param {req.body.${key}} comparisonValue 
  * @param {cbFuntion} authCb 
  * @returns 
  */
-const authenticator = (userDatabase, userValue, authCb) => {
+
+const authenticator = (userDatabase, comparisonValue, authCb) => {
 
   for(let userData in userDatabase) {
     const user = userDatabase[userData]
-     if(authCb(user, userValue)) {
-       return user.id
+     if(authCb(user, comparisonValue)) {
+       return authCb(user, comparisonValue)
      }
   }
   return false;
@@ -41,5 +58,6 @@ const authenticator = (userDatabase, userValue, authCb) => {
 module.exports = { 
   authenticator,
   passwordChecker,
-  emailChecker
+  emailChecker,
+  idChecker
 }
