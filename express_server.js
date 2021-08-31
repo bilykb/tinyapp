@@ -3,7 +3,7 @@ const app = express();
 const PORT = 8080; // default port 8080
 const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
-const emailChecker = require('./emailChecker')
+const { authenticator, passwordChecker, emailChecker } = require('./authenticator');
 
 app.set('view engine', 'ejs');
 
@@ -20,12 +20,13 @@ const users = {
     rememberMe: undefined
   },
  "user2RandomID": {
-    id: "user2RandomID", 
-    email: "user2@example.com", 
+    id: "user2RandomID",
+    email: "user2@example.com",
     password: "dishwasher-funk",
     rememberMe: undefined
   }
 };
+console.log(users)
 
 const generateRandomString = () => {
 // returns six random numbers in base 36, converted to a string representation of their number
@@ -50,12 +51,21 @@ app.get('/login', (req, res) => {
 });
 
 app.post('/login', (req, res) => {
-  res.cookie('userEmail', req.cookies.user_id)
-  res.redirect("/urls");
+  const emailEntered = req.body.email;
+  const passwordEntered = req.body.password;
+  const verifiedEmail = authenticator(users, emailEntered, emailChecker);
+  const verifiedPassword = authenticator(users, passwordEntered, passwordChecker);
+
+  if(verifiedEmail && verifiedPassword) {
+    res.cookie("user_id", verifiedEmail);
+    res.redirect("/urls");
+  } else {
+    res.status(403).send('Sorry, please verify your name and password!');
+  }
 });
 
 app.post('/logout', (req, res) => {
-  res.clearCookie('user_id', req.cookies.user_id)
+    res.clearCookie('user_id', req.cookies.user_id)
   res.redirect("/urls");
 });
 
@@ -69,11 +79,12 @@ app.post('/register', (req, res) => {
   const newRandomID = generateRandomString()
   const newEmail = req.body.email;
   const newPassword = req.body.password
+  const emailVerifyer = authenticator(users, newEmail, emailChecker)
 
-  console.log(newEmail, users)
+
   if(!newEmail.length || !newPassword.length) {
     return res.status(400).send("Error code: 400\nPOST failed")
-  } else if (emailChecker(newEmail, users)){
+  } else if (emailVerifyer){
     return res.status(400).send("Error code: 400\nThis email already exists")
   }
   users[newRandomID] = {
@@ -82,9 +93,7 @@ app.post('/register', (req, res) => {
     password: newPassword,
     rememberMe: undefined
   }
-  if(req.body.saveCookies) {
-    res.cookie("user_id", newRandomID)
-  }
+  res.cookie("user_id", newRandomID)
   res.redirect('/urls');
 });
 

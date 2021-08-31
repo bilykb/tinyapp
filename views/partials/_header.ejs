@@ -10,7 +10,7 @@
       <a class="nav-item nav-link" href="/urls/new">Create New URL</a>
     </div>
     <% if(!user) { %>
-      <div class="btn-group" role="group" style="margin-right: 1em"aria-label="login left regisration right">
+      <div class="btn-group" role="group" style="margin-right: 1em" aria-label="login left regisration right">
         <form class="form-inline" method="GET" action="/login">
           <button class="btn btn-outline-light" type="submit">Login</button>
         </form>
@@ -19,7 +19,7 @@
         </form>
       </div>
       <% } else { %>
-        <div class="dropdown">
+        <div class="dropdown" style="margin-right: 1em">
           <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false"><%= user["email"] %></button>
           <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
             <li><form method="POST" action="/logout">
