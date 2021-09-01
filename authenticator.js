@@ -1,4 +1,4 @@
-
+const bcrypt = require('bcrypt');
 
 /**
  * Function checks to see if a ID exists within the database; Helper function for authenticator
@@ -26,13 +26,13 @@ const idChecker = (userId, shortUrlDatabase) => {
  */
 
 const authenticator = (userDatabase, reqEmail, reqPassword) => {
-  
+
   for(let userData in userDatabase) {
     const user = userDatabase[userData];
     const userInfo = userDatabase[user.id];
 
     if(user.email === reqEmail) {
-      if(userInfo.email === reqEmail && userInfo.password === reqPassword) {
+      if(userInfo.email === reqEmail && bcrypt.compareSync(reqPassword, user.password)) {
         return user.id;
       }
     }

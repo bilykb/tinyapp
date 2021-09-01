@@ -4,35 +4,24 @@ const PORT = 8080; // default port 8080
 const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
 const { authenticator, idChecker } = require('./authenticator');
+const bcrypt = require('bcrypt')
 
 app.set('view engine', 'ejs');
 
 const urlDatabase = {
-  b6UTxQ: { longURL: "https://www.tsn.ca", userID: "aJ48lW" },
-  i3BoGr: { longURL: "https://www.google.ca", userID: "aJ48lW" }
+  
 };
 
 const users = { 
-  "aJ48lW": {
-    id: "aJ48lW", 
-    email: "user@example.com", 
-    password: "1",
-    rememberMe: undefined
-  },
- "b23456": {
-    id: "b23456",
-    email: "user2@example.com",
-    password: "2",
-    rememberMe: undefined
-  }
+  
 };
-
+console.log(users);
 const generateRandomString = () => {
 // returns six random numbers in base 36, converted to a string representation of their number
 return Math.random().toString(36).substr(2, 6);
 };
 
-app.use(bodyParser.urlencoded({extended:true}))
+app.use(bodyParser.urlencoded({extended:true}));
 app.use(cookieParser());
 
 app.get("/", (req, res) => {
@@ -44,9 +33,9 @@ app.get('/urls.json', (req, res) => {
 });
 
 app.get('/login', (req, res) => {
-  const userID = req.cookies.user_id
+  const userID = req.cookies.user_id;
   const templateVars = { user: users[userID] }
-  res.render('login', templateVars)
+  res.render('login', templateVars);
 });
 
 app.post('/login', (req, res) => {
@@ -68,7 +57,7 @@ app.post('/logout', (req, res) => {
 });
 
 app.get('/register', (req, res) => {
-  const userID = req.cookies.user_id
+  const userID = req.cookies.user_id;
   const templateVars = { user: users[userID] };
   res.render('register', templateVars)
 });
@@ -76,22 +65,23 @@ app.get('/register', (req, res) => {
 app.post('/register', (req, res) => {
   const newRandomID = generateRandomString()
   const newEmail = req.body.email;
-  const newPassword = req.body.password
-  const emailVerifyer = authenticator(users, newEmail, newPassword)
+  const newPassword = req.body.password;
+  const hashedPassword = bcrypt.hashSync(newPassword, 10)
+  const emailVerifyer = authenticator(users, newEmail, null)
 
 
   if(!newEmail.length || !newPassword.length) {
-    return res.status(400).send("Error code: 400\nPOST failed")
+    return res.status(400).send("Error code: 400\nPOST failed");
   } else if (emailVerifyer){
-    return res.status(400).send("Error code: 400\nThis email already exists")
+    return res.status(400).send("Error code: 400\nThis email already exists");
   }
   users[newRandomID] = {
     id: newRandomID,
     email: newEmail,
-    password: newPassword,
+    password: hashedPassword,
     rememberMe: undefined
   }
-  res.cookie("user_id", newRandomID)
+  res.cookie("user_id", newRandomID);
   res.redirect('/urls');
 });
 
