@@ -1,12 +1,19 @@
 const express = require('express');
 const app = express();
 const PORT = 8080; // default port 8080
+
 const bodyParser = require('body-parser');
-const cookieParser = require('cookie-parser');
-const { authenticator, idChecker } = require('./authenticator');
+const cookieSession = require('cookie-session');
 const bcrypt = require('bcrypt')
+const { authenticator, idChecker } = require('./authenticator');
 
 app.set('view engine', 'ejs');
+app.use(bodyParser.urlencoded({extended:true}));
+app.use(cookieSession( {
+  name: "session",
+  keys: ["lighthouse", "labs"],
+  maxAge: 24 * 60 * 60 * 7000
+}));
 
 const urlDatabase = {
   
@@ -15,14 +22,12 @@ const urlDatabase = {
 const users = { 
   
 };
-console.log(users);
+
 const generateRandomString = () => {
 // returns six random numbers in base 36, converted to a string representation of their number
 return Math.random().toString(36).substr(2, 6);
 };
 
-app.use(bodyParser.urlencoded({extended:true}));
-app.use(cookieParser());
 
 app.get("/", (req, res) => {
   res.send("Hello!");
@@ -33,8 +38,11 @@ app.get('/urls.json', (req, res) => {
 });
 
 app.get('/login', (req, res) => {
-  const userID = req.cookies.user_id;
+  const userID = req.session.user_id;
   const templateVars = { user: users[userID] }
+  if(req.session.user_id) {
+    res.redirect('/urls')
+  }
   res.render('login', templateVars);
 });
 
@@ -44,7 +52,7 @@ app.post('/login', (req, res) => {
   const verifyAccount = authenticator(users, emailEntered, passwordEntered);
   //verifyAccount returns the user's user_id
   if(verifyAccount) {
-    res.cookie("user_id", verifyAccount);
+    req.session.user_id = verifyAccount;
     res.redirect("/urls");
   } else {
     res.status(403).send('Sorry, please verify your name and password!');
@@ -52,41 +60,42 @@ app.post('/login', (req, res) => {
 });
 
 app.post('/logout', (req, res) => {
-    res.clearCookie('user_id', req.cookies.user_id)
-  res.redirect("/login");
+req.session = null  
+res.redirect("/login");
 });
 
 app.get('/register', (req, res) => {
-  const userID = req.cookies.user_id;
+  const userID = req.session.user_id;
   const templateVars = { user: users[userID] };
   res.render('register', templateVars)
 });
 
 app.post('/register', (req, res) => {
-  const newRandomID = generateRandomString()
   const newEmail = req.body.email;
   const newPassword = req.body.password;
   const hashedPassword = bcrypt.hashSync(newPassword, 10)
   const emailVerifyer = authenticator(users, newEmail, null)
-
-
+  
+  
   if(!newEmail.length || !newPassword.length) {
     return res.status(400).send("Error code: 400\nPOST failed");
   } else if (emailVerifyer){
     return res.status(400).send("Error code: 400\nThis email already exists");
   }
+  
+  req.session.user_id = generateRandomString();
+  const newRandomID = req.session.user_id;
   users[newRandomID] = {
     id: newRandomID,
     email: newEmail,
     password: hashedPassword,
     rememberMe: undefined
   }
-  res.cookie("user_id", newRandomID);
   res.redirect('/urls');
 });
 
 app.get('/urls', (req, res) => {
-  const userID = req.cookies.user_id
+  const userID = req.session.user_id
   const verifiedLinks = idChecker(userID, urlDatabase)
   const templateVars = { urls: urlDatabase, shortUrlArray: verifiedLinks, user: users[userID] };
   if(!userID) {
@@ -97,12 +106,12 @@ app.get('/urls', (req, res) => {
 
 app.post('/urls', (req, res) => {
   const newRandomID = generateRandomString()
-  urlDatabase[newRandomID] = { longURL: req.body.longURL, userID: req.cookies.user_id }
+  urlDatabase[newRandomID] = { longURL: req.body.longURL, userID: req.session.user_id }
   res.redirect(`/urls/${newRandomID}`);
 });
 
 app.get('/urls/new', (req, res) => {
-  const userID = req.cookies.user_id
+  const userID = req.session.user_id
   const templateVars = { user: users[userID] };
   if(!templateVars.user) {
     return res.redirect("/login")
@@ -114,7 +123,7 @@ app.get('/urls/new', (req, res) => {
 app.post('/urls/:shortURL', (req, res) => {
   const longURL = req.body.longURL
   const shortURL = req.params.shortURL
-  const userId = req.cookies.user_id
+  const userId = req.session.user_id
   const verifiedLinks = idChecker(userId, urlDatabase)
 
   if(verifiedLinks.includes(shortURL)) {
@@ -125,7 +134,7 @@ app.post('/urls/:shortURL', (req, res) => {
 
 
 app.get('/urls/:shortURL', (req, res) => {
-  const userId = req.cookies.user_id;
+  const userId = req.session.user_id;
   const shortURLkey = req.params.shortURL;
   const templateVars = { shortURL: req.params.shortURL, longURL: urlDatabase[shortURLkey].longURL, user: users[userId] };
 
@@ -133,7 +142,7 @@ app.get('/urls/:shortURL', (req, res) => {
 });
 
 app.post('/urls/:shortURL/delete', (req, res) => {
-  const userId = req.cookies.user_id;
+  const userId = req.session.user_id;
   const verifiedLinks = idChecker(userId, urlDatabase);
   if(verifiedLinks.includes(req.params.shortURL)) {
     delete urlDatabase[req.params.shortURL];
