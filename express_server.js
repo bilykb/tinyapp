@@ -3,30 +3,29 @@ const app = express();
 const PORT = 8080; // default port 8080
 const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
-const { authenticator, passwordChecker, emailChecker } = require('./authenticator');
+const { authenticator, idChecker } = require('./authenticator');
 
 app.set('view engine', 'ejs');
 
 const urlDatabase = {
-  "b2xVn2": "http://www.lighthouselabs.ca",
-  "9sm5xK": "http://www.google.com"
+  b6UTxQ: { longURL: "https://www.tsn.ca", userID: "aJ48lW" },
+  i3BoGr: { longURL: "https://www.google.ca", userID: "aJ48lW" }
 };
 
 const users = { 
-  "userRandomID": {
-    id: "userRandomID", 
+  "aJ48lW": {
+    id: "aJ48lW", 
     email: "user@example.com", 
-    password: "purple-monkey-dinosaur",
+    password: "1",
     rememberMe: undefined
   },
- "user2RandomID": {
-    id: "user2RandomID",
+ "b23456": {
+    id: "b23456",
     email: "user2@example.com",
-    password: "dishwasher-funk",
+    password: "2",
     rememberMe: undefined
   }
 };
-console.log(users)
 
 const generateRandomString = () => {
 // returns six random numbers in base 36, converted to a string representation of their number
@@ -53,11 +52,10 @@ app.get('/login', (req, res) => {
 app.post('/login', (req, res) => {
   const emailEntered = req.body.email;
   const passwordEntered = req.body.password;
-  const verifiedEmail = authenticator(users, emailEntered, emailChecker);
-  const verifiedPassword = authenticator(users, passwordEntered, passwordChecker);
-
-  if(verifiedEmail && verifiedPassword) {
-    res.cookie("user_id", verifiedEmail);
+  const verifyAccount = authenticator(users, emailEntered, passwordEntered);
+  //verifyAccount returns the user's user_id
+  if(verifyAccount) {
+    res.cookie("user_id", verifyAccount);
     res.redirect("/urls");
   } else {
     res.status(403).send('Sorry, please verify your name and password!');
@@ -66,7 +64,7 @@ app.post('/login', (req, res) => {
 
 app.post('/logout', (req, res) => {
     res.clearCookie('user_id', req.cookies.user_id)
-  res.redirect("/urls");
+  res.redirect("/login");
 });
 
 app.get('/register', (req, res) => {
@@ -79,7 +77,7 @@ app.post('/register', (req, res) => {
   const newRandomID = generateRandomString()
   const newEmail = req.body.email;
   const newPassword = req.body.password
-  const emailVerifyer = authenticator(users, newEmail, emailChecker)
+  const emailVerifyer = authenticator(users, newEmail, newPassword)
 
 
   if(!newEmail.length || !newPassword.length) {
@@ -99,7 +97,8 @@ app.post('/register', (req, res) => {
 
 app.get('/urls', (req, res) => {
   const userID = req.cookies.user_id
-  const templateVars = { urls: urlDatabase, user: users[userID] };
+  const verifiedLinks = idChecker(userID, urlDatabase)
+  const templateVars = { urls: urlDatabase, shortUrlArray: verifiedLinks, user: users[userID] };
   res.render('urls_index', templateVars);
 });
 
@@ -114,7 +113,7 @@ app.get('/urls/new', (req, res) => {
 
 app.post('/urls', (req, res) => {
   newRandomID = generateRandomString()
-  urlDatabase[newRandomID] = req.body.longURL
+  urlDatabase[newRandomID] = { longURL: req.body.longURL, userID: req.cookies.user_id }
   res.redirect(`/urls/${newRandomID}`);
 });
 
@@ -128,7 +127,7 @@ app.post('/urls/:shortURL', (req, res) => {
 app.get('/urls/:shortURL', (req, res) => {
   const userID = req.cookies.user_id
   const shortURLkey = req.params.shortURL
-  const templateVars = { shortURL: req.params.shortURL, longURL: urlDatabase[shortURLkey], user: users[userID] }
+  const templateVars = { shortURL: req.params.shortURL, longURL: urlDatabase[shortURLkey].longURL, user: users[userID] }
   if(!urlDatabase[req.params.shortURL]) {
     return res.send("Error, please check your shorted URL");
   }
@@ -141,7 +140,8 @@ app.post('/urls/:shortURL/delete', (req, res) => {
 });
 
 app.get('/u/:shortURL', (req, res) => {
-  const longURL = urlDatabase[req.params.shortURL]
+  const shortURLkey = req.params.shortURL
+  const longURL = urlDatabase[shortURLkey].longURL
   if (!longURL) {
     return res.send("Error, please check your shortened URL");
  }
