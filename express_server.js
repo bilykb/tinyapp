@@ -99,16 +99,10 @@ app.get('/urls', (req, res) => {
   const userID = req.cookies.user_id
   const verifiedLinks = idChecker(userID, urlDatabase)
   const templateVars = { urls: urlDatabase, shortUrlArray: verifiedLinks, user: users[userID] };
-  res.render('urls_index', templateVars);
-});
-
-app.get('/urls/new', (req, res) => {
-  const userID = req.cookies.user_id
-  const templateVars = { user: users[userID] };
-  if(!templateVars.user) {
-    res.redirect("/login")
+  if(!userID) {
+    return res.redirect("/login");
   }
-  res.render('urls_new', templateVars);
+  res.render('urls_index', templateVars);
 });
 
 app.post('/urls', (req, res) => {
@@ -116,6 +110,16 @@ app.post('/urls', (req, res) => {
   urlDatabase[newRandomID] = { longURL: req.body.longURL, userID: req.cookies.user_id }
   res.redirect(`/urls/${newRandomID}`);
 });
+
+app.get('/urls/new', (req, res) => {
+  const userID = req.cookies.user_id
+  const templateVars = { user: users[userID] };
+  if(!templateVars.user) {
+    return res.redirect("/login")
+  }
+  res.render('urls_new', templateVars);
+});
+
 
 app.post('/urls/:shortURL', (req, res) => {
   const shortURLkey = req.params.shortURL
