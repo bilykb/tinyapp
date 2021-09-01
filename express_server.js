@@ -106,7 +106,7 @@ app.get('/urls', (req, res) => {
 });
 
 app.post('/urls', (req, res) => {
-  newRandomID = generateRandomString()
+  const newRandomID = generateRandomString()
   urlDatabase[newRandomID] = { longURL: req.body.longURL, userID: req.cookies.user_id }
   res.redirect(`/urls/${newRandomID}`);
 });
@@ -122,30 +122,38 @@ app.get('/urls/new', (req, res) => {
 
 
 app.post('/urls/:shortURL', (req, res) => {
-  const shortURLkey = req.params.shortURL
-  urlDatabase[shortURLkey] = req.body.longURL
-  res.redirect(`/urls/${shortURLkey}`);
+  const longURL = req.body.longURL
+  const shortURL = req.params.shortURL
+  const userId = req.cookies.user_id
+  const verifiedLinks = idChecker(userId, urlDatabase)
+
+  if(verifiedLinks.includes(shortURL)) {
+    urlDatabase[shortURL] = { longURL: longURL, userID: userId }
+  }
+  res.redirect(`/urls`);
 });
 
 
 app.get('/urls/:shortURL', (req, res) => {
-  const userID = req.cookies.user_id
-  const shortURLkey = req.params.shortURL
-  const templateVars = { shortURL: req.params.shortURL, longURL: urlDatabase[shortURLkey].longURL, user: users[userID] }
-  if(!urlDatabase[req.params.shortURL]) {
-    return res.send("Error, please check your shorted URL");
-  }
+  const userId = req.cookies.user_id;
+  const shortURLkey = req.params.shortURL;
+  const templateVars = { shortURL: req.params.shortURL, longURL: urlDatabase[shortURLkey].longURL, user: users[userId] };
+
   res.render('urls_show', templateVars);
 });
 
 app.post('/urls/:shortURL/delete', (req, res) => {
-  delete urlDatabase[req.params.shortURL];
-  res.redirect("/urls")
+  const userId = req.cookies.user_id;
+  const verifiedLinks = idChecker(userId, urlDatabase);
+  if(verifiedLinks.includes(req.params.shortURL)) {
+    delete urlDatabase[req.params.shortURL];
+  }
+  res.redirect("/urls");
 });
 
 app.get('/u/:shortURL', (req, res) => {
-  const shortURLkey = req.params.shortURL
-  const longURL = urlDatabase[shortURLkey].longURL
+  const shortURLkey = req.params.shortURL;
+  const longURL = urlDatabase[shortURLkey].longURL;
   if (!longURL) {
     return res.send("Error, please check your shortened URL");
  }
