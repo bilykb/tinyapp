@@ -48,5 +48,11 @@ describe('authenticator', function() {
     const expectedOutput = undefined;
 
     assert.isUndefined(user, expectedOutput);
-  })
+  });
+  it('should return the user-id of the user despite additional white space', function() {
+    const user = authenticator(testUsers, "   user2@example.com   ", "   dishwasher-funk   ");
+    const expectedOutput = "user2RandomID";
+
+    assert.equal(user, expectedOutput);
+  });
 });
