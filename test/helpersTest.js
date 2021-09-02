@@ -88,4 +88,12 @@ describe('generateRandomString', function() {
 
     assert.equal(randomString.length, expectedOutput);
   });
+  it('should generate a random distinct string each time', function() {
+    const randomString1 = generateRandomString();
+    const randomString2 = generateRandomString();
+    const randomString3 = generateRandomString();
+
+    assert.notEqual(randomString1, randomString2);
+    assert.notEqual(randomString2, randomString3);
+  });
 });
