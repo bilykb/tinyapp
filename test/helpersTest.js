@@ -43,7 +43,7 @@ describe('authenticator', function() {
 
     assert.isUndefined(user, expectedOutput);
   });
-  it('should return undefined when logging in the username of one user, and password of another user', function() {
+  it('should return undefined when logging in the email of one user, and password of another user', function() {
     const user = authenticator(testUsers, "user@example.com", "dishwasher-funk");
     const expectedOutput = undefined;
 
@@ -55,10 +55,16 @@ describe('authenticator', function() {
 
     assert.equal(user, expectedOutput);
   });
-  it('should return undefined when logging-in if username is an empty string', function() {
+  it('should return undefined when logging-in if email is an empty string', function() {
     const user = authenticator(testUsers, "", "   dishwasher-funk   ");
     const expectedOutput = undefined;
 
     assert.isUndefined(user, expectedOutput)
+  });
+  it('should return undefined when logging in if password is an empty string', function() {
+    const user = authenticator(testUsers, "   user2@example.com   ", "");
+    const expectedOutput = undefined;
+
+    assert.isUndefined(user, expectedOutput);
   });
 });
