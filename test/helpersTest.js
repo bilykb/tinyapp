@@ -67,4 +67,10 @@ describe('authenticator', function() {
 
     assert.isUndefined(user, expectedOutput);
   });
+  it('should return undefined if both email and password are empty strings', function() {
+    const user = authenticator(testUsers, "", "");
+    const expectedOutput = undefined;
+
+    assert.isUndefined(user, expectedOutput);
+  });
 });
