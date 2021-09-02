@@ -33,10 +33,10 @@ app.get('/login', (req, res) => {
 });
 
 app.post('/login', (req, res) => {
-  const emailEntered = req.body.email;
-  const passwordEntered = req.body.password;
-  const verifyAccount = authenticator(users, emailEntered, passwordEntered);
+  const { email, password } = req.body
+  const verifyAccount = authenticator(users, email, password);
   //verifyAccount returns the user's user_id
+  
   if(verifyAccount) {
     req.session.user_id = verifyAccount;
     res.redirect("/urls");
@@ -57,13 +57,11 @@ app.get('/register', (req, res) => {
 });
 
 app.post('/register', (req, res) => {
-  const newEmail = req.body.email;
-  const newPassword = req.body.password;
-  const hashedPassword = bcrypt.hashSync(newPassword, 10)
-  const emailVerifyer = authenticator(users, newEmail, null)
+  const { email, password } = req.body
+  const hashedPassword = bcrypt.hashSync(password, 10)
+  const emailVerifyer = authenticator(users, email, null)
   
-  
-  if(!newEmail.length || !newPassword.length) {
+  if(!email.length || !password.length) {
     return res.status(400).send("Error code: 400\nPOST failed");
   } else if (emailVerifyer){
     return res.status(400).send("Error code: 400\nThis email already exists");
@@ -73,7 +71,7 @@ app.post('/register', (req, res) => {
   const newRandomID = req.session.user_id;
   users[newRandomID] = {
     id: newRandomID,
-    email: newEmail,
+    email: email,
     password: hashedPassword,
     rememberMe: undefined
   }
@@ -81,7 +79,7 @@ app.post('/register', (req, res) => {
 });
 
 app.get('/urls', (req, res) => {
-  const userID = req.session.user_id
+  const userID = req.session.user_id;
   const verifiedLinks = idChecker(userID, urlDatabase)
   const templateVars = { urls: urlDatabase, shortUrlArray: verifiedLinks, user: users[userID] };
   if(!userID) {
@@ -91,27 +89,26 @@ app.get('/urls', (req, res) => {
 });
 
 app.post('/urls', (req, res) => {
-  const newRandomID = generateRandomString()
+  const newRandomID = generateRandomString();
   urlDatabase[newRandomID] = { longURL: req.body.longURL, userID: req.session.user_id }
   res.redirect(`/urls/${newRandomID}`);
 });
 
 app.get('/urls/new', (req, res) => {
-  const userID = req.session.user_id
+  const userID = req.session.user_id;
   const templateVars = { user: users[userID] };
   if(!templateVars.user) {
-    return res.redirect("/login")
+    return res.redirect("/login");
   }
   res.render('urls_new', templateVars);
 });
 
 
 app.post('/urls/:shortURL', (req, res) => {
-  const longURL = req.body.longURL
-  const shortURL = req.params.shortURL
-  const userId = req.session.user_id
-  const verifiedLinks = idChecker(userId, urlDatabase)
-
+  const longURL = req.body.longURL;
+  const shortURL = req.params.shortURL;
+  const userId = req.session.user_id;
+  const verifiedLinks = idChecker(userId, urlDatabase);
   if(verifiedLinks.includes(shortURL)) {
     urlDatabase[shortURL] = { longURL: longURL, userID: userId }
   }
@@ -133,10 +130,10 @@ app.post('/urls/:shortURL/delete', (req, res) => {
   if(verifiedLinks.includes(req.params.shortURL)) {
     delete urlDatabase[req.params.shortURL];
   }
-  res.redirect("/urls");
+  res.redirect("/urls");        
 });
 
-app.get('/u/:shortURL', (req, res) => {
+          app.get('/u/:shortURL', (req, res) => {
   const shortURLkey = req.params.shortURL;
   const longURL = urlDatabase[shortURLkey].longURL;
   if (!longURL) {
