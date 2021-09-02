@@ -39,7 +39,13 @@ const authenticator = (userDatabase, reqEmail, reqPassword) => {
   }
 };
 
-module.exports = { 
+const generateRandomString = () => {
+  // returns six random numbers in base 36, converted to a string representation of their number
+  return Math.random().toString(36).substr(2, 6);
+  };
+
+module.exports = {
+  generateRandomString,
   authenticator,
   idChecker
 }

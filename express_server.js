@@ -5,7 +5,7 @@ const PORT = 8080; // default port 8080
 const bodyParser = require('body-parser');
 const cookieSession = require('cookie-session');
 const bcrypt = require('bcrypt')
-const { authenticator, idChecker } = require('./authenticator');
+const { authenticator, idChecker, generateRandomString } = require('./authenticator');
 
 app.set('view engine', 'ejs');
 app.use(bodyParser.urlencoded({extended:true}));
@@ -21,11 +21,6 @@ const urlDatabase = {
 
 const users = { 
   
-};
-
-const generateRandomString = () => {
-// returns six random numbers in base 36, converted to a string representation of their number
-return Math.random().toString(36).substr(2, 6);
 };
 
 app.get('/login', (req, res) => {
