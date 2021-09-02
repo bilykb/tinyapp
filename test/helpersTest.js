@@ -43,4 +43,10 @@ describe('authenticator', function() {
 
     assert.isUndefined(user, expectedOutput);
   });
+  it('should return undefined when logging in the username of one user, and password of another user', function() {
+    const user = authenticator(testUsers, "user@example.com", "dishwasher-funk");
+    const expectedOutput = undefined;
+
+    assert.isUndefined(user, expectedOutput);
+  })
 });
