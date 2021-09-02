@@ -1,10 +1,10 @@
 const bcrypt = require('bcrypt');
 
 /**
- * Function checks to see if a ID exists within the database; Helper function for authenticator
- * @param {string} userId userId information
+ * Function checks to see if a ID exists within the database; Returns a list of short URLs associated with a user
+ * @param {string} userId user.session.id - session cookie
  * @param {object} shortUrlDatabase object where short URLs and associated user IDs are stored
- * @returns {boolean} boolean for whethere there is a match
+ * @returns {array} Array of verified shortURL links
  */
 
 const idChecker = (userId, shortUrlDatabase) => {
@@ -18,10 +18,10 @@ const idChecker = (userId, shortUrlDatabase) => {
 };
 
 /**
- * Function which authenticates various user data using three helper functions: emailChecker, passwordChecker, and idChecker
+ * Function which authenticates user data, and returns the user.id if it exists
  * @param {object} userDatabase 
  * @param {req.body.${key}} reqEmail 
- * @param {string} reqPassword 
+ * @param {req.body.${key}} reqPassword 
  * @returns 
  */
 
@@ -31,13 +31,19 @@ const authenticator = (userDatabase, reqEmail, reqPassword) => {
     const user = userDatabase[userData];
     const userInfo = userDatabase[user.id];
 
-    if(user.email === reqEmail) {
-      if(userInfo.email === reqEmail && bcrypt.compareSync(reqPassword, user.password)) {
+    if(user.email === reqEmail.trim() && reqPassword === null) {
+      return true
+    } else if(userInfo.email === reqEmail.trim() && bcrypt.compareSync(reqPassword.trim(), user.password)) {
         return user.id;
-      }
     }
   }
 };
+
+
+/**
+ * generateRandomString() generates a random 6 digit string
+ * @returns random string of numbers and letters
+ */
 
 const generateRandomString = () => {
   // returns six random numbers in base 36, converted to a string representation of their number
