@@ -5,7 +5,7 @@ const PORT = 8080; // default port 8080
 const bodyParser = require('body-parser');
 const cookieSession = require('cookie-session');
 const bcrypt = require('bcrypt')
-const { authenticator, idChecker, generateRandomString } = require('./helper');
+const { authenticator, verifyLinksWithId, generateRandomString } = require('./helper');
 
 app.set('view engine', 'ejs');
 app.use(bodyParser.urlencoded({extended:true}));
@@ -36,7 +36,7 @@ app.get('/login', (req, res) => {
 
 app.get('/urls', (req, res) => {
   const userID = req.session.user_id;
-  const verifiedLinks = idChecker(userID, urlDatabase)
+  const verifiedLinks = verifyLinksWithId(userID, urlDatabase)
   const templateVars = { urls: urlDatabase, shortUrlArray: verifiedLinks, user: users[userID] };
   if(!userID) {
     return res.redirect("/login");
@@ -129,7 +129,8 @@ app.post('/urls/:shortURL', (req, res) => {
   const longURL = req.body.longURL;
   const shortURL = req.params.shortURL;
   const userId = req.session.user_id;
-  const verifiedLinks = idChecker(userId, urlDatabase);
+  const verifiedLinks = verifyLinksWithId(userId, urlDatabase);
+
   if(verifiedLinks.includes(shortURL)) {
     urlDatabase[shortURL] = { longURL: longURL, userID: userId }
   }
@@ -138,7 +139,7 @@ app.post('/urls/:shortURL', (req, res) => {
 
 app.post('/urls/:shortURL/delete', (req, res) => {
   const userId = req.session.user_id;
-  const verifiedLinks = idChecker(userId, urlDatabase);
+  const verifiedLinks = verifyLinksWithId(userId, urlDatabase);
   if(verifiedLinks.includes(req.params.shortURL)) {
     delete urlDatabase[req.params.shortURL];
   }

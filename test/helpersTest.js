@@ -1,5 +1,5 @@
 const { assert, expect } = require('chai');
-const { generateRandomString, authenticator, idChecker } = require('../helper');
+const { generateRandomString, authenticator, verifyLinksWithId } = require('../helper');
 const bcrypt = require('bcrypt');
 
 const hashedPassword1 = bcrypt.hashSync("purple-monkey-dinosaur", 10);
@@ -103,21 +103,21 @@ describe('generateRandomString', function() {
   });
 });
 
-describe('idChecker', function() {
+describe('verifyLinksWithId', function() {
   it('should return an empty array if a cookie has not been set with cookie-session', function() {
-    const verifiedLinks = idChecker(undefined, urlDatabase);
+    const verifiedLinks = verifyLinksWithId(undefined, urlDatabase);
     const expectedOutput = [];
 
     assert.deepEqual(verifiedLinks, expectedOutput);
   });
   it('should return an empty array if a user has not assigned any shortURLs to their account', function() {
-    const verifiedLinks = idChecker("user2RandomID", urlDatabase);
+    const verifiedLinks = verifyLinksWithId("user2RandomID", urlDatabase);
     const expectedOutput = [];
 
     assert.deepEqual(verifiedLinks, expectedOutput);
   });
   it('should return an array of two urls associated with a specific user', function() {
-    const verifiedLinks = idChecker("userRandomID", urlDatabase);
+    const verifiedLinks = verifyLinksWithId("userRandomID", urlDatabase);
     const expectedOutput = ["b6UTxQ", "i3BoGr"];
 
     assert.deepEqual(verifiedLinks, expectedOutput);

@@ -7,7 +7,7 @@ const bcrypt = require('bcrypt');
  * @returns {array} Array of verified shortURL links
  */
 
-const idChecker = (userId, shortUrlDatabase) => {
+const verifyLinksWithId = (userId, shortUrlDatabase) => {
   const verifiedLinks = [];
   for(let shortUrl in shortUrlDatabase) {
     if(userId === shortUrlDatabase[shortUrl].userID) {
@@ -53,5 +53,5 @@ const generateRandomString = () => {
 module.exports = {
   generateRandomString,
   authenticator,
-  idChecker
+  verifyLinksWithId
 }
