@@ -105,7 +105,13 @@ describe('generateRandomString', function() {
 
 describe('idChecker', function() {
   it('should return an empty array if a cookie has not been set with cookie-session', function() {
-    const verifiedLinks = idChecker("", testUsers);
+    const verifiedLinks = idChecker("", urlDatabase);
+    const expectedOutput = [];
+
+    assert.deepEqual(verifiedLinks, expectedOutput);
+  });
+  it('should return an empty array if a user has not assigned any shortURLs to their account', function() {
+    const verifiedLinks = idChecker("user2RandomID", urlDatabase);
     const expectedOutput = [];
 
     assert.deepEqual(verifiedLinks, expectedOutput);
