@@ -74,3 +74,12 @@ describe('authenticator', function() {
     assert.isUndefined(user, expectedOutput);
   });
 });
+
+describe('generateRandomString', function() {
+  it('should generate string', function() {
+    const randomString = generateRandomString();
+    const expectedOutput = "string";
+
+    assert.typeOf(randomString, expectedOutput, "is a string")
+  });
+});
