@@ -1,4 +1,4 @@
-const { assert } = require('chai');
+const { assert, expect } = require('chai');
 const { generateRandomString, authenticator, idChecker } = require('../helper');
 const bcrypt = require('bcrypt');
 
@@ -16,6 +16,11 @@ const testUsers = {
     email: "user2@example.com", 
     password: hashedPassword2
   }
+};
+
+const urlDatabase = {
+  b6UTxQ: { longURL: "https://www.tsn.ca", userID: "userRandomID" },
+  i3BoGr: { longURL: "https://www.google.ca", userID: "userRandomID" }
 };
 
 describe('authenticator', function() {
@@ -95,5 +100,14 @@ describe('generateRandomString', function() {
 
     assert.notEqual(randomString1, randomString2);
     assert.notEqual(randomString2, randomString3);
+  });
+});
+
+describe('idChecker', function() {
+  it('should return an empty array if a cookie has not been set with cookie-session', function() {
+    const verifiedLinks = idChecker("", testUsers);
+    const expectedOutput = [];
+
+    assert.deepEqual(verifiedLinks, expectedOutput);
   });
 });
