@@ -116,4 +116,10 @@ describe('idChecker', function() {
 
     assert.deepEqual(verifiedLinks, expectedOutput);
   });
+  it('should return an array of two urls associated with a specific user', function() {
+    const verifiedLinks = idChecker("userRandomID", urlDatabase);
+    const expectedOutput = ["b6UTxQ", "i3BoGr"];
+
+    assert.deepEqual(verifiedLinks, expectedOutput);
+  });
 });
