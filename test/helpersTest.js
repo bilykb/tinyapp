@@ -25,4 +25,10 @@ describe('authenticator', function() {
 
     assert.isTrue(user, expectedOutput);
   });
+  it('should return undefined if email does not exist in the data base, and password is null', function() {
+    const user = authenticator(testUsers, "123@email.com", null);
+    const expectedOutput = undefined;
+
+    assert.isUndefined(user, expectedOutput);
+  });
 });
