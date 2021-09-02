@@ -28,15 +28,6 @@ const generateRandomString = () => {
 return Math.random().toString(36).substr(2, 6);
 };
 
-
-app.get("/", (req, res) => {
-  res.send("Hello!");
-});
-
-app.get('/urls.json', (req, res) => {
-  res.json(urlDatabase);
-});
-
 app.get('/login', (req, res) => {
   const userID = req.session.user_id;
   const templateVars = { user: users[userID] }
@@ -81,7 +72,7 @@ app.post('/register', (req, res) => {
     return res.status(400).send("Error code: 400\nPOST failed");
   } else if (emailVerifyer){
     return res.status(400).send("Error code: 400\nThis email already exists");
-  }
+  };
   
   req.session.user_id = generateRandomString();
   const newRandomID = req.session.user_id;
@@ -157,10 +148,6 @@ app.get('/u/:shortURL', (req, res) => {
     return res.send("Error, please check your shortened URL");
  }
 res.redirect(longURL);
-});
-
-app.get('/hello', (req, res) => {
-  res.send('<html><body>Hello <b>World</b></body></html>\n');
 });
 
 app.listen(PORT, () => {
