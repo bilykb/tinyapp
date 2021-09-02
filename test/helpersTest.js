@@ -105,7 +105,7 @@ describe('generateRandomString', function() {
 
 describe('idChecker', function() {
   it('should return an empty array if a cookie has not been set with cookie-session', function() {
-    const verifiedLinks = idChecker("", urlDatabase);
+    const verifiedLinks = idChecker(undefined, urlDatabase);
     const expectedOutput = [];
 
     assert.deepEqual(verifiedLinks, expectedOutput);
