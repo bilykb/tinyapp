@@ -31,4 +31,10 @@ describe('authenticator', function() {
 
     assert.isUndefined(user, expectedOutput);
   });
+  it('it should return the user.id if the if the login email and password match the user in the database', function() {
+    const user = authenticator(testUsers, "user@example.com", "purple-monkey-dinosaur");
+    const expectedOutput = "userRandomID";
+
+    assert.equal(user, expectedOutput);
+  });
 });
