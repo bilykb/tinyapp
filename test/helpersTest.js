@@ -82,4 +82,10 @@ describe('generateRandomString', function() {
 
     assert.typeOf(randomString, expectedOutput, "is a string")
   });
+  it('should generate a string with a length of six', function() {
+    const randomString = generateRandomString();
+    const expectedOutput = 6
+
+    assert.equal(randomString.length, expectedOutput);
+  });
 });
