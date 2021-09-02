@@ -55,4 +55,10 @@ describe('authenticator', function() {
 
     assert.equal(user, expectedOutput);
   });
+  it('should return undefined when logging-in if username is an empty string', function() {
+    const user = authenticator(testUsers, "", "   dishwasher-funk   ");
+    const expectedOutput = undefined;
+
+    assert.isUndefined(user, expectedOutput)
+  });
 });
