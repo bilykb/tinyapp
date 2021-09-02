@@ -23,6 +23,8 @@ const users = {
   
 };
 
+//  <----------GET requests---------->  \\
+
 app.get('/login', (req, res) => {
   const userID = req.session.user_id;
   const templateVars = { user: users[userID] }
@@ -32,11 +34,55 @@ app.get('/login', (req, res) => {
   res.render('login', templateVars);
 });
 
+app.get('/urls', (req, res) => {
+  const userID = req.session.user_id;
+  const verifiedLinks = idChecker(userID, urlDatabase)
+  const templateVars = { urls: urlDatabase, shortUrlArray: verifiedLinks, user: users[userID] };
+  if(!userID) {
+    return res.redirect("/login");
+  }
+  res.render('urls_index', templateVars);
+});
+
+app.get('/register', (req, res) => {
+  const userID = req.session.user_id;
+  const templateVars = { user: users[userID] };
+  res.render('register', templateVars)
+});
+
+app.get('/urls/new', (req, res) => {
+  const userID = req.session.user_id;
+  const templateVars = { user: users[userID] };
+  if(!templateVars.user) {
+    return res.redirect("/login");
+  }
+  res.render('urls_new', templateVars);
+});
+
+app.get('/urls/:shortURL', (req, res) => {
+  const userId = req.session.user_id;
+  const shortURLkey = req.params.shortURL;
+  const templateVars = { shortURL: req.params.shortURL, longURL: urlDatabase[shortURLkey].longURL, user: users[userId] };
+
+  res.render('urls_show', templateVars);
+});
+
+app.get('/u/:shortURL', (req, res) => {
+  const shortURLkey = req.params.shortURL;
+  const longURL = urlDatabase[shortURLkey].longURL;
+  if (!longURL) {
+    return res.send("Error, please check your shortened URL");
+ }
+res.redirect(longURL);
+});
+
+//  <----------POST requests---------->  \\
+
 app.post('/login', (req, res) => {
   const { email, password } = req.body
   const verifyAccount = authenticator(users, email, password);
   //verifyAccount returns the user's user_id
-  
+
   if(verifyAccount) {
     req.session.user_id = verifyAccount;
     res.redirect("/urls");
@@ -48,12 +94,6 @@ app.post('/login', (req, res) => {
 app.post('/logout', (req, res) => {
 req.session = null  
 res.redirect("/login");
-});
-
-app.get('/register', (req, res) => {
-  const userID = req.session.user_id;
-  const templateVars = { user: users[userID] };
-  res.render('register', templateVars)
 });
 
 app.post('/register', (req, res) => {
@@ -78,29 +118,10 @@ app.post('/register', (req, res) => {
   res.redirect('/urls');
 });
 
-app.get('/urls', (req, res) => {
-  const userID = req.session.user_id;
-  const verifiedLinks = idChecker(userID, urlDatabase)
-  const templateVars = { urls: urlDatabase, shortUrlArray: verifiedLinks, user: users[userID] };
-  if(!userID) {
-    return res.redirect("/login");
-  }
-  res.render('urls_index', templateVars);
-});
-
 app.post('/urls', (req, res) => {
   const newRandomID = generateRandomString();
   urlDatabase[newRandomID] = { longURL: req.body.longURL, userID: req.session.user_id }
   res.redirect(`/urls/${newRandomID}`);
-});
-
-app.get('/urls/new', (req, res) => {
-  const userID = req.session.user_id;
-  const templateVars = { user: users[userID] };
-  if(!templateVars.user) {
-    return res.redirect("/login");
-  }
-  res.render('urls_new', templateVars);
 });
 
 
@@ -115,15 +136,6 @@ app.post('/urls/:shortURL', (req, res) => {
   res.redirect(`/urls`);
 });
 
-
-app.get('/urls/:shortURL', (req, res) => {
-  const userId = req.session.user_id;
-  const shortURLkey = req.params.shortURL;
-  const templateVars = { shortURL: req.params.shortURL, longURL: urlDatabase[shortURLkey].longURL, user: users[userId] };
-
-  res.render('urls_show', templateVars);
-});
-
 app.post('/urls/:shortURL/delete', (req, res) => {
   const userId = req.session.user_id;
   const verifiedLinks = idChecker(userId, urlDatabase);
@@ -133,14 +145,6 @@ app.post('/urls/:shortURL/delete', (req, res) => {
   res.redirect("/urls");        
 });
 
-          app.get('/u/:shortURL', (req, res) => {
-  const shortURLkey = req.params.shortURL;
-  const longURL = urlDatabase[shortURLkey].longURL;
-  if (!longURL) {
-    return res.send("Error, please check your shortened URL");
- }
-res.redirect(longURL);
-});
 
 app.listen(PORT, () => {
   console.log(`Example app listening on port ${PORT}`);
