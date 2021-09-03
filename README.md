@@ -57,5 +57,5 @@
 > Function which authenticates user data, and returns the user.id if it exists
 
 
-### <a name="helper">[input.js](https://github.com/bilykb/tinyapp/blob/master/helper.js)</a>
+### <a name="helper">[generateRandomString()](https://github.com/bilykb/tinyapp/blob/master/helper.js)</a>
 > generateRandomString() generates a random 6 digit string
