@@ -117,7 +117,6 @@ app.post('/register', (req, res) => {
     id: newRandomID,
     email: email,
     password: hashedPassword,
-    rememberMe: undefined
   }
   res.redirect('/urls');
 });
