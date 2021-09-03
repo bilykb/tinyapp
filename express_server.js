@@ -59,6 +59,10 @@ app.get('/urls/new', (req, res) => {
   res.render('urls_new', templateVars);
 });
 
+app.get('/', (req, res) => {
+  res.redirect("/urls");
+});
+
 app.get('/urls/:shortURL', (req, res) => {
   const userId = req.session.user_id;
   const shortURLkey = req.params.shortURL;
