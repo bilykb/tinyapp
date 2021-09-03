@@ -29,7 +29,7 @@ app.get('/login', (req, res) => {
   const userID = req.session.user_id;
   const templateVars = { user: users[userID] }
   if(req.session.user_id) {
-    res.redirect('/urls')
+    res.redirect('/login')
   }
   res.render('login', templateVars);
 });
