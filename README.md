@@ -87,7 +87,7 @@
 ### <a name="new">[urls_new.ejs](https://github.com/bilykb/tinyapp/blob/master/views/urls_new.ejs)</a>
 > new page where a new tinyURL is created
 
-### <a name="now">[urls_show.ejs](https://github.com/bilykb/tinyapp/blob/master/views/urls_show.ejs)</a>
+### <a name="show">[urls_show.ejs](https://github.com/bilykb/tinyapp/blob/master/views/urls_show.ejs)</a>
 > Information and edit page for individual URLs
 
 ---
