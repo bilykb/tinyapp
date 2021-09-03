@@ -124,7 +124,7 @@ app.post('/register', (req, res) => {
 app.post('/urls', (req, res) => {
   const newRandomID = generateRandomString();
   urlDatabase[newRandomID] = { longURL: req.body.longURL, userID: req.session.user_id }
-  res.redirect(`/urls/${newRandomID}`);
+  res.redirect(`/urls/`);
 });
 
 
