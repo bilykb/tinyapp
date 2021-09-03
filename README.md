@@ -75,11 +75,11 @@
 ### EJS Views
 
 #### <a name="login">[login.ejs](https://github.com/bilykb/tinyapp/blob/master/views/login.ejs)</a>
- > Login page for tinyURL
+ > Login page for tinyApp
 
  
 ### <a name="register">[register.ejs](https://github.com/bilykb/tinyapp/blob/master/views/register.ejs)</a>
-> Register page for tinyURL
+> Register page for tinyApp
 
 ### <a name="index">[urls_index.ejs](https://github.com/bilykb/tinyapp/blob/master/views/urls_index.ejs)</a>
 > index page which lists all urls associated with a user
