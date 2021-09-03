@@ -1,4 +1,4 @@
-const { assert, expect } = require('chai');
+const { assert } = require('chai');
 const { generateRandomString, authenticator, verifyLinksWithId } = require('../helper');
 const bcrypt = require('bcrypt');
 
@@ -7,13 +7,13 @@ const hashedPassword2 = bcrypt.hashSync("dishwasher-funk", 10);
 
 const testUsers = {
   "userRandomID": {
-    id: "userRandomID", 
-    email: "user@example.com", 
+    id: "userRandomID",
+    email: "user@example.com",
     password: hashedPassword1
   },
   "user2RandomID": {
-    id: "user2RandomID", 
-    email: "user2@example.com", 
+    id: "user2RandomID",
+    email: "user2@example.com",
     password: hashedPassword2
   }
 };
@@ -25,7 +25,7 @@ const urlDatabase = {
 
 describe('authenticator', function() {
   it('should return true if a email exists in the database, and password is null', function() {
-    const user = authenticator(testUsers, "user@example.com", null)
+    const user = authenticator(testUsers, "user@example.com", null);
     const expectedOutput = "true";
 
     assert.isTrue(user, expectedOutput);
@@ -64,7 +64,7 @@ describe('authenticator', function() {
     const user = authenticator(testUsers, "", "   dishwasher-funk   ");
     const expectedOutput = undefined;
 
-    assert.isUndefined(user, expectedOutput)
+    assert.isUndefined(user, expectedOutput);
   });
   it('should return undefined when logging in if password is an empty string', function() {
     const user = authenticator(testUsers, "   user2@example.com   ", "");
@@ -85,11 +85,11 @@ describe('generateRandomString', function() {
     const randomString = generateRandomString();
     const expectedOutput = "string";
 
-    assert.typeOf(randomString, expectedOutput, "is a string")
+    assert.typeOf(randomString, expectedOutput, "is a string");
   });
   it('should generate a string with a length of six', function() {
     const randomString = generateRandomString();
-    const expectedOutput = 6
+    const expectedOutput = 6;
 
     assert.equal(randomString.length, expectedOutput);
   });

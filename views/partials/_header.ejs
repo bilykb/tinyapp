@@ -5,29 +5,29 @@
       <span class="navbar-toggler-icon"></span>
     </button>
     <div class="collapse navbar-collapse justify-content-between" id="navbarNavAltMarkup">
-    <div class="navbar-nav">
-      <a class="nav-item nav-link" href="/urls">My URLs</a>
-      <a class="nav-item nav-link" href="/urls/new">Create New URL</a>
-    </div>
-    <% if(!user) { %>
-      <div class="btn-group" role="group" style="margin-right: 1em" aria-label="login left regisration right">
-        <form class="form-inline" method="GET" action="/login">
-          <button class="btn btn-outline-light" type="submit">Login</button>
-        </form>
-        <form class="form-inline" method="GET" action="/register">
-          <button class="btn btn-outline-light" type="submit">Register</button>
-        </form>
+      <div class="navbar-nav">
+        <a class="nav-item nav-link" href="/urls">My URLs</a>
+        <a class="nav-item nav-link" href="/urls/new">Create New URL</a>
       </div>
-      <% } else { %>
-        <div class="dropdown" style="margin-right: 1em">
-          <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false"><%= user["email"] %></button>
-          <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-            <li><form method="POST" action="/logout">
-              <button class="dropdown-item" aria-labelledby="dropdownMenuButton" type="submit">Logout</button>
-            </form></li>
-          </ul>
+      <% if(!user) { %>
+        <div class="btn-group" role="group" style="margin-right: 1em" aria-label="login left regisration right">
+          <form class="form-inline" method="GET" action="/login">
+            <button class="btn btn-outline-light" type="submit">Login</button>
+          </form>
+          <form class="form-inline" method="GET" action="/register">
+            <button class="btn btn-outline-light" type="submit">Register</button>
+          </form>
         </div>
-      <% } %>
+        <% } else { %>
+          <div class="dropdown" style="margin-right: 1em">
+            <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false"><%= user["email"] %></button>
+            <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+              <li><form method="POST" action="/logout">
+                <button class="dropdown-item" aria-labelledby="dropdownMenuButton" type="submit">Logout</button>
+              </form></li>
+            </ul>
+          </div>
+        <% } %>
     </div>
   </nav>
 </header>

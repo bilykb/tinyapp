@@ -9,32 +9,32 @@ const bcrypt = require('bcrypt');
 
 const verifyLinksWithId = (userId, shortUrlDatabase) => {
   const verifiedLinks = [];
-  for(let shortUrl in shortUrlDatabase) {
-    if(userId === shortUrlDatabase[shortUrl].userID) {
+  for (let shortUrl in shortUrlDatabase) {
+    if (userId === shortUrlDatabase[shortUrl].userID) {
       verifiedLinks.push(shortUrl);
     }
   }
-  return verifiedLinks
+  return verifiedLinks;
 };
 
 /**
  * Function which authenticates user data, and returns the user.id if it exists
- * @param {object} userDatabase 
- * @param {req.body.${key}} reqEmail 
- * @param {req.body.${key}} reqPassword 
- * @returns 
+ * @param {object} userDatabase
+ * @param {sting} reqEmail req.body.${key}
+ * @param {string}} reqPassword req.body.${key
+ * @returns user.id
  */
 
 const authenticator = (userDatabase, reqEmail, reqPassword) => {
 
-  for(let userData in userDatabase) {
+  for (let userData in userDatabase) {
     const user = userDatabase[userData];
     const userInfo = userDatabase[user.id];
 
-    if(user.email === reqEmail.trim() && reqPassword === null) {
-      return true
-    } else if(userInfo.email === reqEmail.trim() && bcrypt.compareSync(reqPassword.trim(), user.password)) {
-        return user.id;
+    if (user.email === reqEmail.trim() && reqPassword === null) {
+      return true;
+    } else if (userInfo.email === reqEmail.trim() && bcrypt.compareSync(reqPassword.trim(), user.password)) {
+      return user.id;
     }
   }
 };
@@ -48,10 +48,10 @@ const authenticator = (userDatabase, reqEmail, reqPassword) => {
 const generateRandomString = () => {
   // returns six random numbers in base 36, converted to a string representation of their number
   return Math.random().toString(36).substr(2, 6);
-  };
+};
 
 module.exports = {
   generateRandomString,
   authenticator,
   verifyLinksWithId
-}
+};
