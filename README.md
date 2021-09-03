@@ -8,13 +8,13 @@
 ## What is TinyApp?
 ---
 
->TinyApp is a full stack web application built with Node and Express that allows users to shorten long URLs (à la bit.ly).
+TinyApp is a full stack web application built with Node and Express that allows users to shorten long URLs (à la bit.ly).
 
 ---
 ## Summary
 ---
 
->This repository contains all the ejs and javascript files created over the course of the tinyApp project while studying at [Lighthouse Labs](https://www.lighthouselabs.ca/). 
+This repository contains all the ejs and javascript files created over the course of the tinyApp project while studying at [Lighthouse Labs](https://www.lighthouselabs.ca/). 
 
 ---
 ## Dependencies
