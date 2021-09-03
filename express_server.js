@@ -29,7 +29,7 @@ app.get('/login', (req, res) => {
   const userID = req.session.user_id;
   const templateVars = { user: users[userID] }
   if(req.session.user_id) {
-    res.redirect('/login')
+    res.redirect('/urls')
   }
   res.render('login', templateVars);
 });
@@ -123,8 +123,16 @@ app.post('/register', (req, res) => {
 
 app.post('/urls', (req, res) => {
   const newRandomID = generateRandomString();
-  urlDatabase[newRandomID] = { longURL: req.body.longURL, userID: req.session.user_id }
-  res.redirect(`/urls/`);
+  const longUrl = req.body.longURL
+  const user_id = req.session.user_id
+  // found online https://www.regextester.com/93652
+  const regex = new RegExp('^(http:\/\/www\.|https:\/\/www\.|http:\/\/|https:\/\/)?[a-z0-9]+([\-\.]{1}[a-z0-9]+)*\.[a-z]{2,5}(:[0-9]{1,5})?(\/.*)?$');
+  if(regex.test(longUrl)) {
+    urlDatabase[newRandomID] = { longURL: longUrl, userID: user_id }
+    res.redirect(`/urls/`);
+  } else {
+    res.status(422).send("Error code: 422</br></br>Please ensure your long URL matches one of the following formats:</br></br>https://www.example.com</br>http://www.example.com</br>www.google.com")
+  }
 });
 
 
