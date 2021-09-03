@@ -5,7 +5,7 @@
 ###### <span style="color:red">**Beware:  This code was created while studying Web Development at Lighthouse Labs and is _not_ intended for use outside of a learning scenario. Use at your own risk.**</span>
 
 ---
-## What is Snek Client?
+## What is TinyApp?
 ---
 
 >TinyApp is a full stack web application built with Node and Express that allows users to shorten long URLs (à la bit.ly).
@@ -31,9 +31,11 @@
 ---
 > Install all dependencies (using the `npm install` command)
 > Run the development web server using the `node express_server.js` command
+
 ---
 ## Final Product
 ---
+
 #### Login Page
 <img width="1432" alt="Login page" src="https://user-images.githubusercontent.com/18246168/132057274-64d47503-66fe-4c3a-8341-172a1157fa7f.png">
 
@@ -42,22 +44,58 @@
 
 
 ---
-## Table of Contents: Helper Functions
+## Table of Contents
+---
+| Helper Functions | EJS Views | EJS Parials |
+| --- | --- | --- |
+| [verifyLinksWithId()](#links) | [login.ejs](#login) | [_emailAndPasswordForm.ejs](#form) |
+| [authenticator()](#auth) | [register.ejs](#register) | [_header.ejs](#header) |
+| [generateRandomString()](#random) | [urls_index.ejs](#index) |
+| | [urls_new.ejs](#new) | |
+| | [urls_show.ejs](#show) | |
+
+---
+## Contents
 ---
 
-| [verifyLinksWithId()](#helper) | [authenticator()](#helper) | [generateRandomString()](#helper) |
+### Helper Functions
 
----
-## Contents: Helper Functions
----
-
-### <a name="helper">[verifyLinksWithId()](https://github.com/bilykb/tinyapp/blob/master/helper.js)</a>
+#### <a name="links">[verifyLinksWithId()](https://github.com/bilykb/tinyapp/blob/master/helper.js)</a>
  > Function checks to see if a ID exists within the database; Returns a list of short URLs associated with a user
 
  
-### <a name="helper">[authenticator()](https://github.com/bilykb/tinyapp/blob/master/helper.js)</a>
+#### <a name="auth">[authenticator()](https://github.com/bilykb/tinyapp/blob/master/helper.js)</a>
 > Function which authenticates user data, and returns the user.id if it exists
 
 
-### <a name="helper">[generateRandomString()](https://github.com/bilykb/tinyapp/blob/master/helper.js)</a>
+#### <a name="random">[generateRandomString()](https://github.com/bilykb/tinyapp/blob/master/helper.js)</a>
 > generateRandomString() generates a random 6 digit string
+
+---
+### EJS Views
+
+#### <a name="login">[login.ejs](https://github.com/bilykb/tinyapp/blob/master/views/login.ejs)</a>
+ > Login page for tinyURL
+
+ 
+### <a name="register">[register.ejs](https://github.com/bilykb/tinyapp/blob/master/views/register.ejs)</a>
+> Register page for tinyURL
+
+### <a name="index">[urls_index.ejs](https://github.com/bilykb/tinyapp/blob/master/views/urls_index.ejs)</a>
+> index page which lists all urls associated with a user
+
+### <a name="new">[urls_new.ejs](https://github.com/bilykb/tinyapp/blob/master/views/urls_new.ejs)</a>
+> new page where a new tinyURL is created
+
+### <a name="now">[urls_show.ejs](https://github.com/bilykb/tinyapp/blob/master/views/urls_show.ejs)</a>
+> Information and edit page for individual URLs
+
+---
+### EJS Partials
+
+#### <a name="form">[_emailAndPasswordForm.ejs](https://github.com/bilykb/tinyapp/blob/master/views/partials/_emailAndPasswordForm.ejs)</a>
+ > partial with an email and password form.  Used in register.ejs and login.ejs
+
+ 
+#### <a name="header">[_header.ejs](https://github.com/bilykb/tinyapp/blob/master/views/partials/_header.ejs)</a>
+> partial with header HTML.  Used in all views.
